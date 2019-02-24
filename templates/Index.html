@@ -65,7 +65,7 @@
     {% for foo in zhihu.stories %}
         <div>
         <a href="/news/{{ foo.id }}">{{ foo.title }}</a>
-        <img src="{{ foo.images }}"/>
+        <img src="{{ foo.images.0 }}"/>
         </div>
     {% endfor %}
 
