@@ -5,6 +5,70 @@
     <title>Index</title>
 </head>
 <body>
-主页
+{#当前天气:<br/>#}
+{#{% if location_weather.status == 'ok' %}#}
+{#    所在地：{{ location_weather.basic.cnty }}，{{ location_weather.basic.location }}<br/>#}
+{#    经度：{{ location_weather.basic.lat }}， 纬度：{{ location_weather.basic.lon }}<br/>#}
+{#    时区：{{ location_weather.basic.tz }}<br/>#}
+{#    天气：{{ location_weather.now.cond_txt}}<br/>#}
+{#    风向：{{ location_weather.now.wind_dir }}，360°风向：{{ location_weather.now.wind_deg }}°，风力：{{ location_weather.now.wind_spd }}公里/小时<br/>#}
+{#    体感温度：{{ location_weather.now.fl }}℃<br/>#}
+{#    相对湿度：{{ location_weather.now.hum }}<br/>#}
+{#    大气压强：{{ location_weather.now.pres }}<br/>#}
+{#{% else %}#}
+{#    接口错误#}
+{#{% endif %}#}
+
+{% if forecast.status == 'ok' %}
+    <h2>天气情况</h2>
+    <h3>当前天气：</h3>
+    所在地：{{ forecast.basic.cnty }}，{{ forecast.basic.location }}<br/>
+    经度：{{ forecast.basic.lat }}， 纬度：{{ forecast.basic.lon }}<br/>
+    时区：{{ forecast.basic.tz }}<br/>
+    天气：{{ forecast.now.cond_txt}}<br/>
+    风向：{{ forecast.now.wind_dir }}，360°风向：{{ forecast.now.wind_deg }}°，风力：{{ forecast.now.wind_spd }}公里/小时<br/>
+    体感温度：{{ forecast.now.fl }}℃<br/>
+    相对湿度：{{ forecast.now.hum }}<br/>
+    大气压强：{{ forecast.now.pres }}<br/>
+    <h3>天气预报</h3>
+
+    {% for foo in forecast.daily_forecast %}
+        <div style="float: left">
+        预报日期:{{ foo.time }}<br/>
+        日出时间：{{ foo.sr }}，日落时间：{{ foo.ss }}<br/>
+        最高温度：{{ foo.tmp_max }}℃，最低温度：{{ foo.tmp_min }}℃<br/>
+        天气：白天：{{ foo.cond_txt_d }}，晚间：{{ foo.cond_txt_d }}<br/>
+        风向：{{ foo.wind_dir }}，360°风向：{{ foo.wind_deg }}°<br/>
+        风力；{{ foo.wind_sc }}，风速：{{ foo.wind_spd }}公里/每小时<br/>
+        相对湿度：{{ foo.hum }}，降水量：{{ foo.pcpn }}mL<br/>
+        紫外线强度指数：{{ foo.uv_index }}
+        </div>
+    {% endfor %}
+{% elif forecast.status == 'unknown location' %}
+    未知地点
+{% else %}
+    接口错误
+{% endif %}<br/><br/><br/><br/><br/><br/><br/><br/>
+<h2>天气查询</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="text" name="slocation"/> <input type="submit" name="s" value="查询">
+</form>
+
+<h2>今日消息</h2>
+    {% for foo in zhihu.top_stories %}
+        <div>
+        <a href="/news/{{ foo.id }}">{{ foo.title }}</a>
+        <img src="{{ foo.image }}"/>
+        </div>
+    {% endfor %}
+    {% for foo in zhihu.stories %}
+        <div>
+        <a href="/news/{{ foo.id }}">{{ foo.title }}</a>
+        <img src="{{ foo.images }}"/>
+        </div>
+    {% endfor %}
+
+
 </body>
 </html>

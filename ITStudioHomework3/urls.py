@@ -16,8 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include
+from indexWeb.views import news
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^news/(\d+)', news),
     url(r'^.*', include('indexWeb.urls', namespace='Index'))
 ]
